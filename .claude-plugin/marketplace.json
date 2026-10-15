@@ -1,5 +1,6 @@
 {
   "name": "gsom-design",
+  "description": "Фирменный стиль ВШМ СПбГУ для Claude: генерация презентаций по брендбуку.",
   "owner": {
     "name": "ardubrovskij-dotcom"
   },
