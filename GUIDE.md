@@ -35,14 +35,10 @@
 
 ### Вариант Б. claude.ai (веб и приложения)
 
-1. Скачайте репозиторий: на странице GitHub нажмите **Code → Download ZIP** и распакуйте.
-2. Заархивируйте папку `skills/gsom-presentation` так, чтобы в корне архива лежала папка
-   `gsom-presentation`:
-   ```bash
-   cd skills && zip -r gsom-presentation.zip gsom-presentation
-   ```
-3. В claude.ai откройте **Customize → Skills → «+» → Create skill → Upload a skill** и загрузите архив.
-4. Включите **Code execution and file creation**:
+1. Скачайте готовый архив: [gsom-presentation.zip](https://github.com/ardubrovskij-dotcom/gsom-design/raw/HEAD/dist/gsom-presentation.zip).
+   Распаковывать его не нужно.
+2. В claude.ai откройте **Customize → Skills → «+» → Create skill → Upload a skill** и загрузите архив.
+3. Включите **Code execution and file creation**:
    - на тарифах Free, Pro и Max — в Settings → Capabilities;
    - на Team и Enterprise — это делает владелец организации.
 
@@ -124,4 +120,4 @@ claude plugin uninstall gsom-design@gsom-design   # удалить
 | Ошибка `No module named 'pptx'` | `pip install python-pptx pillow lxml` |
 | Claude пишет, что не может сделать превью | Установите LibreOffice и poppler (раздел 1); файл при этом всё равно собирается |
 | В PowerPoint «не тот» шрифт | Установите Inter (раздел 3) |
-| claude.ai не принимает архив | Проверьте, что в корне архива папка `gsom-presentation`; если не помогает — вариант А |
+| claude.ai не принимает архив | Скачайте архив заново по ссылке из раздела 1; если не помогает — вариант А |

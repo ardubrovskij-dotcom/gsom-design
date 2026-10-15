@@ -1,45 +1,48 @@
-# gsom-design — презентации в стиле ВШМ СПбГУ для Claude
+# Презентации в стиле ВШМ СПбГУ для Claude
 
-Плагин для Claude Code со скиллом **`gsom-presentation`**. Достаточно написать
-**«Создай презентацию в стиле ВШМ про …»**, и Claude соберёт `.pptx` по брендбуку
-Высшей школы менеджмента СПбГУ.
+Скилл **`gsom-presentation`**: пишете Claude **«Создай презентацию в стиле ВШМ про …»** и получаете
+готовый `.pptx` по брендбуку Высшей школы менеджмента СПбГУ — фирменные цвета, шрифт Inter,
+логотип, карточки, таблицы, диаграммы, таймлайны.
 
-Как это работает: скилл не рисует слайды с нуля, а собирает их из **официального шаблона
-презентации ВШМ** (110 образцовых слайдов: титулы, разделители, карточки, таблицы, диаграммы,
-схемы, таймлайны, контакты, библиотеки иконок, иллюстраций и фото). Claude выбирает подходящие
-слайды, заполняет их текстом, данными и фото, затем рендерит превью и проверяет результат.
-
-**Коротко об установке и работе — [GUIDE.md](GUIDE.md).**
+Слайды собираются из **официального шаблона презентации ВШМ** (110 образцов), поэтому
+дизайн совпадает с оригиналом. Claude подбирает слайды, заполняет их вашим текстом, данными
+и фото, рендерит превью и сам исправляет огрехи.
 
 ![Пример](examples/demo/contact-sheet.png)
 
 ## Установка
 
-### Вариант 1 — плагин Claude Code (рекомендуется)
-```
-/plugin marketplace add ardubrovskij-dotcom/gsom-design
-/plugin install gsom-design@gsom-design
-```
-
-### Вариант 2 — открыть этот репозиторий
+### Claude Code — терминал, десктоп-приложение, VS Code
+В терминале:
 ```bash
-git clone https://github.com/ardubrovskij-dotcom/gsom-design.git
-cd gsom-design && claude
+claude plugin marketplace add ardubrovskij-dotcom/gsom-design
+claude plugin install gsom-design@gsom-design
 ```
-Скилл подключён как проектный: `.claude/skills/gsom-presentation` — это ссылка на `skills/gsom-presentation`.
+Или внутри сессии Claude Code: `/plugin marketplace add ardubrovskij-dotcom/gsom-design`,
+затем `/plugin install gsom-design@gsom-design`. После установки перезапустите сессию.
 
-### Вариант 3 — личный скилл
-Скопируйте папку `skills/gsom-presentation` в `~/.claude/skills/`.
+Один раз поставьте зависимости:
+```bash
+pip install python-pptx pillow lxml
+```
+Рекомендуется также LibreOffice и poppler: с ними Claude видит превью слайдов и проверяет их
+(macOS: `brew install --cask libreoffice && brew install poppler`,
+Ubuntu: `sudo apt install libreoffice poppler-utils`).
 
-### Вариант 4 — claude.ai
-Заархивируйте папку `skills/gsom-presentation` (`zip -r gsom-presentation.zip skills/gsom-presentation`)
-и загрузите архив в настройках claude.ai → Capabilities → Skills. Архив весит около 40 МБ,
-лимит загрузки проверьте в настройках: нет подтверждённых данных о текущем лимите.
+### claude.ai — веб и приложения
+1. Скачайте готовый архив: **[gsom-presentation.zip](https://github.com/ardubrovskij-dotcom/gsom-design/raw/HEAD/dist/gsom-presentation.zip)** (38 МБ).
+2. В claude.ai откройте **Customize → Skills → «+» → Create skill → Upload a skill** и загрузите архив.
+3. Включите **Code execution and file creation**: на Free, Pro и Max — в Settings → Capabilities;
+   на Team и Enterprise это делает владелец организации.
 
-### Зависимости
-- Python 3.9+, `pip install python-pptx pillow lxml`
-- Для предпросмотра слайдов: LibreOffice (`soffice`) и poppler (`pdftoppm`).
-  Без них презентация собирается, но Claude не сможет проверить её визуально.
+> Лимит размера загрузки в справке claude.ai не указан. Если архив не принимается,
+> используйте Claude Code.
+
+### Другие способы
+- Клонировать репозиторий и запустить `claude` в его папке: скилл подключится как проектный.
+- Скопировать `skills/gsom-presentation` в `~/.claude/skills/`.
+
+**Подробная инструкция по работе со скиллом — [GUIDE.md](GUIDE.md).**
 
 ## Примеры запросов
 - «Создай презентацию в стиле ВШМ: итоги приёмной кампании 2026, данные в приложенной таблице»
@@ -65,7 +68,9 @@ skills/gsom-presentation/
 tools/
   build_templates.py        # исходный шаблон из брендбука -> assets/template.pptx
   build_catalog.py          # превью каталога и reference/catalog.md
+  package_skill.sh          # пересобрать dist/gsom-presentation.zip
 examples/demo/              # пример spec.json, готовой .pptx и превью
+dist/gsom-presentation.zip  # готовый архив скилла для claude.ai (tools/package_skill.sh)
 ```
 
 Ручная сборка без Claude:
