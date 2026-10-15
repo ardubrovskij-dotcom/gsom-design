@@ -1,0 +1,13 @@
+{
+  "name": "gsom-design",
+  "owner": {
+    "name": "ardubrovskij-dotcom"
+  },
+  "plugins": [
+    {
+      "name": "gsom-design",
+      "source": "./",
+      "description": "Презентации в фирменном стиле ВШМ СПбГУ: скилл gsom-presentation (шаблон + брендбук + генератор .pptx)."
+    }
+  ]
+}

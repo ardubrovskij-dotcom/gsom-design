@@ -1,0 +1,10 @@
+{
+  "name": "gsom-design",
+  "version": "1.0.0",
+  "description": "Презентации в фирменном стиле ВШМ СПбГУ (GSOM SPbU): официальный шаблон, брендбук, логотипы, иконки, генератор .pptx.",
+  "author": {
+    "name": "ardubrovskij-dotcom"
+  },
+  "repository": "https://github.com/ardubrovskij-dotcom/gsom-design",
+  "keywords": ["gsom", "вшм", "spbu", "presentation", "pptx", "brandbook"]
+}
