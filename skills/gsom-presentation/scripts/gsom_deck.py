@@ -474,12 +474,17 @@ def set_table(slide, tbl_shape, value):
             tbl._tbl.tr_lst[-1].addnext(copy.deepcopy(tbl._tbl.tr_lst[-1]))
         tbl._tbl.tr_lst[-1].addnext(total_tr)
     tr_list = tbl._tbl.tr_lst
+    orig_n, orig_h = len(tr_list), sum(int(tr.get("h", 0)) for tr in tr_list)
     while len(tr_list) < len(rows):              # добавить строки по образцу последней
         new_tr = copy.deepcopy(tr_list[-1])
         tr_list[-1].addnext(new_tr)
         tr_list = tbl._tbl.tr_lst
     for tr in tr_list[len(rows):]:                # лишние строки удалить
         tbl._tbl.remove(tr)
+    if len(rows) > orig_n and orig_h:            # больше строк, чем в образце: вписать в ту же высоту
+        k = orig_n / len(rows)
+        for tr in tbl._tbl.tr_lst:
+            tr.set("h", str(int(int(tr.get("h", 0)) * k)))
     total_h = 0
     for r, row in enumerate(rows):
         for c in range(len(tbl.columns)):
@@ -760,6 +765,7 @@ class Deck:
             if k:
                 self._sources[k] = s
         self._layouts = {l.name: l for l in self.prs.slide_masters[0].slide_layouts}
+        self._src_boxes = {}
         if lang == "en":
             self._english_logos()
 
@@ -814,7 +820,10 @@ class Deck:
                 if not sh.is_placeholder:
                     sh._element.getparent().remove(sh._element)
         else:
-            slide = clone_slide(self.prs, self.source(key))
+            src = self.source(key)
+            slide = clone_slide(self.prs, src)
+            self._src_boxes[id(slide.part)] = {
+                (sh.shape_id, sh.left, sh.top, sh.width, sh.height) for sh in src.shapes if sh.width}
         self.fill(slide, fields or {})
         for spec in add or []:
             ADDERS[spec["type"]](slide, spec)
@@ -887,6 +896,8 @@ class Deck:
             for sh in slide.shapes:
                 if sh.width is None or sh.is_placeholder:
                     continue
+                if (sh.shape_id, sh.left, sh.top, sh.width, sh.height) in self._src_boxes.get(id(slide.part), ()):
+                    continue   # так задумано в шаблоне
                 if sh.left + sh.width > W + tol or sh.top + sh.height > H + tol:
                     out.append(f"слайд {n}, фигура #{sh.shape_id}: выходит за край слайда")
         return out
